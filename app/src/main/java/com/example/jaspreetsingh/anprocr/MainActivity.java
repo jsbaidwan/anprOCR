@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mCameraView = (SurfaceView) findViewById(R.id.surfaceView);
+        mTextView = (TextView) findViewById(R.id.text_view);
+
+        startCameraSource();
+
     }
 
         /**
