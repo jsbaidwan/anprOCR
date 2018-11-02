@@ -2,10 +2,13 @@ package com.example.jaspreetsingh.anprocr;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.vision.text.TextRecognizer;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,5 +30,12 @@ public class MainActivity extends AppCompatActivity {
         // create a separate tracker instance for each text block.
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
+        if (!textRecognizer.isOperational()) {
+
+            // isOperational() can be used to check if the required native libraries are currently
+            // available.  The detectors will automatically become operational once the library
+            // downloads complete on device.
+            Log.w(TAG, "Detector dependencies not loaded yet");
+        }
     }
 }
