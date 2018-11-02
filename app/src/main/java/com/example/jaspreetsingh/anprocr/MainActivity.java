@@ -1,17 +1,26 @@
 package com.example.jaspreetsingh.anprocr;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.text.TextRecognizer;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
+    SurfaceView mCameraView;
     CameraSource mCameraSource;
 
     private static final String TAG = "MainActivity";
+    private static final int requestPermissionID = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,29 @@ public class MainActivity extends AppCompatActivity {
                     .setAutoFocusEnabled(true)
                     .setRequestedFps(2.0f)
                     .build();
+
+            /**
+             * Add call back to SurfaceView and check if camera permission is granted.
+             * If permission is granted we can start our cameraSource and pass it to surfaceView
+             */
+            mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+                @Override
+                public void surfaceCreated(SurfaceHolder holder) {
+                    try {
+
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.CAMERA},
+                                    requestPermissionID);
+                            return;
+                        }
+                        mCameraSource.start(mCameraView.getHolder());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
         }
     }
 }
