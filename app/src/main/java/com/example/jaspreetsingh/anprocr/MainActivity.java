@@ -4,9 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 public class MainActivity extends AppCompatActivity {
+
+    CameraSource mCameraSource;
 
     private static final String TAG = "MainActivity";
 
@@ -36,6 +39,17 @@ public class MainActivity extends AppCompatActivity {
             // available.  The detectors will automatically become operational once the library
             // downloads complete on device.
             Log.w(TAG, "Detector dependencies not loaded yet");
+        } else {
+
+            // Creates and starts the camera.  Note that this uses a higher resolution in comparison
+            // to other detection examples to enable the text recognizer to detect small pieces of text.
+            mCameraSource =
+                    new CameraSource.Builder(getApplicationContext(), textRecognizer)
+                    .setFacing(CameraSource.CAMERA_FACING_BACK)
+                    .setRequestedPreviewSize(1280, 1024)
+                    .setAutoFocusEnabled(true)
+                    .setRequestedFps(2.0f)
+                    .build();
         }
     }
 }
